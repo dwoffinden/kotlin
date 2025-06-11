@@ -69,16 +69,15 @@ interface IReplStageState<T> {
 
 fun <T> IReplStageHistory<T>.firstMismatch(other: Sequence<ILineId>): Pair<ReplHistoryRecord<T>?, ILineId?>? =
         lock.read {
-            iterator().asSequence().zip(other.asSequence()).firstOrNull { it.first.id != it.second }?.let { it.first to it.second }
+            asSequence().zip(other).firstOrNull { it.first.id != it.second }?.let { it.first to it.second }
         }
 
 fun<T> IReplStageHistory<T>.firstMismatchFiltered(other: Sequence<ILineId>, predicate: (ReplHistoryRecord<T>) -> Boolean): Pair<ReplHistoryRecord<T>?, ILineId?>? =
         lock.read {
-            iterator().asSequence().filter(predicate).zip(other.asSequence()).firstOrNull { it.first.id != it.second }?.let { it.first to it.second }
+            asSequence().filter(predicate).zip(other).firstOrNull { it.first.id != it.second }?.let { it.first to it.second }
         }
 
 fun<T> IReplStageHistory<T>.firstMismatchWhile(other: Sequence<ILineId>, predicate: (ReplHistoryRecord<T>) -> Boolean): Pair<ReplHistoryRecord<T>?, ILineId?>? =
         lock.read {
-            iterator().asSequence().takeWhile(predicate).zip(other.asSequence()).firstOrNull { it.first.id != it.second }?.let { it.first to it.second }
+            asSequence().takeWhile(predicate).zip(other).firstOrNull { it.first.id != it.second }?.let { it.first to it.second }
         }
-
